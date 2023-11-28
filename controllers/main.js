@@ -5,7 +5,7 @@ const login = async (req, res) => {
 const dashboard = async (req, res) => {
   const luckeyNumber = Math.floor(Math.random() * 100);
   res.status(200).json({
-    msg: `hello, joy pollo`,
+    msg: `hello, joy polo`,
     secret: `Here is your authorised data, here is your luckey Number ${luckeyNumber}`,
   });
 };
