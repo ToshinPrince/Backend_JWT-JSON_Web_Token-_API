@@ -47,4 +47,8 @@ const dashboard = async (req, res) => {
   }
 };
 
+const submit = async (req, res) => {
+  const body = req.body;
+};
+
 module.exports = { login, dashboard };
