@@ -1,5 +1,5 @@
-const CustomAPIError = require("../errors/custom-error");
 const jwt = require("jsonwebtoken");
+const { BadRequest } = require("../errors/bad-request");
 
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -10,7 +10,7 @@ const login = async (req, res) => {
   //check in the controller - This is what we are doing below, because initially we are not connecting to the data base, will do in future update
 
   if (!username || !password) {
-    throw new CustomAPIError("Please Provide username and password", 400);
+    throw new BadRequest("Please Provide username and password");
   }
 
   //just for demo, normally provided by DB
@@ -25,26 +25,13 @@ const login = async (req, res) => {
 };
 
 const dashboard = async (req, res) => {
-  const authHeader = req.headers.authorization;
+  console.log(req.user);
 
-  if (!authHeader || !authHeader.startsWith("Bearer")) {
-    throw new CustomAPIError("No Token Provided", 401);
-  }
-
-  const token = authHeader.split(" ")[1];
-  console.log(token);
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
-    console.log(decoded);
-    const luckeyNumber = Math.floor(Math.random() * 100);
-    res.status(200).json({
-      msg: `hello, ${decoded.username}`,
-      secret: `Here is your authorised data, here is your luckey Number ${luckeyNumber}`,
-    });
-  } catch (error) {
-    throw new CustomAPIError("Not authorized to access this route", 401);
-  }
+  const luckeyNumber = Math.floor(Math.random() * 100);
+  res.status(200).json({
+    msg: `hello, ${req.user.username}`,
+    secret: `Here is your authorised data, here is your luckey Number ${luckeyNumber}`,
+  });
 };
 
 const submit = async (req, res) => {
